@@ -41,7 +41,7 @@ class StepperExtensions[@specialized(Double, Int, Long) A](private val s: Steppe
     }
   }
 
-  def substep(): Stepper[A] = s.trySplit()
+  def substep(): Stepper[A] | Null = s.trySplit()
 
   /** Consumes all remaining elements in this `Stepper` and counts how many there are.
     * This is a terminal operation.
