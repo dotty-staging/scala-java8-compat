@@ -30,7 +30,7 @@ class IncStepperA(private val size0: Long) extends IntStepper {
   override def estimateSize: Long = math.max(0L, size0 - i)
   def hasStep = i < size0
   def nextStep() = { i += 1; (i - 1).toInt }
-  def trySplit() = if (estimateSize <= 1) null else {
+  def trySplit(): IncStepperA = if (estimateSize <= 1) null.asInstanceOf[IncStepperA] else {
     val sub = new IncStepperA(size0 - (size0 - i)/2)
     sub.i = i
     i = sub.size0
@@ -44,7 +44,7 @@ class IncSpliterator(private val size0: Long) extends Spliterator.OfInt {
   def characteristics = Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED
   def estimateSize() = math.max(0L, size0 - i)
   def tryAdvance(f: java.util.function.IntConsumer): Boolean = if (i >= size0) false else { f.accept(i.toInt); i += 1; true }
-  def trySplit(): Spliterator.OfInt = if (i+1 >= size0) null else {
+  def trySplit(): Spliterator.OfInt | Null = if (i+1 >= size0) null else {
     val sub = new IncSpliterator(size0 - (size0 - i)/2)
     sub.i = i
     i = sub.size0
@@ -60,7 +60,7 @@ class MappingStepper[@specialized (Double, Int, Long) A, @specialized(Double, In
 
   override def trySplit(): Stepper[B] = {
     val r = underlying.trySplit()
-    if (r == null) null else new MappingStepper[A, B](r, mapping)
+    if (r == null) null.asInstanceOf[Stepper[B]] else new MappingStepper[A, B](r, mapping)
   }
 
   override def estimateSize: Long = underlying.estimateSize
@@ -81,7 +81,7 @@ class MappingSpliterator[A, B](private val underlying: Spliterator[A], mapping: 
   def characteristics = underlying.characteristics
   def estimateSize() = underlying.estimateSize()
   def tryAdvance(f: java.util.function.Consumer[_ >: B]): Boolean = underlying.tryAdvance(new java.util.function.Consumer[A]{ def accept(a: A): Unit = { f.accept(mapping(a)) } })
-  def trySplit(): Spliterator[B] = {
+  def trySplit(): Spliterator[B] | Null = {
     val undersplit = underlying.trySplit()
     if (undersplit == null) null
     else new MappingSpliterator(undersplit, mapping)
@@ -91,7 +91,7 @@ class IntToGenericSpliterator[A](private val underlying: Spliterator.OfInt, mapp
   def characteristics = underlying.characteristics
   def estimateSize() = underlying.estimateSize()
   def tryAdvance(f: java.util.function.Consumer[_ >: A]): Boolean = underlying.tryAdvance(new java.util.function.IntConsumer{ def accept(a: Int): Unit = { f.accept(mapping(a)) } })
-  def trySplit(): Spliterator[A] = {
+  def trySplit(): Spliterator[A] | Null = {
     val undersplit = underlying.trySplit()
     if (undersplit == null) null
     else new IntToGenericSpliterator[A](undersplit, mapping)
@@ -101,7 +101,7 @@ class IntToDoubleSpliterator(private val underlying: Spliterator.OfInt, mapping:
   def characteristics = underlying.characteristics
   def estimateSize() = underlying.estimateSize()
   def tryAdvance(f: java.util.function.DoubleConsumer): Boolean = underlying.tryAdvance(new java.util.function.IntConsumer{ def accept(a: Int): Unit = { f.accept(mapping(a)) } })
-  def trySplit(): Spliterator.OfDouble = {
+  def trySplit(): Spliterator.OfDouble | Null = {
     val undersplit = underlying.trySplit()
     if (undersplit == null) null
     else new IntToDoubleSpliterator(undersplit, mapping)
@@ -111,7 +111,7 @@ class IntToLongSpliterator(private val underlying: Spliterator.OfInt, mapping: I
   def characteristics = underlying.characteristics
   def estimateSize() = underlying.estimateSize()
   def tryAdvance(f: java.util.function.LongConsumer): Boolean = underlying.tryAdvance(new java.util.function.IntConsumer{ def accept(a: Int): Unit = { f.accept(mapping(a)) } })
-  def trySplit(): Spliterator.OfLong = {
+  def trySplit(): Spliterator.OfLong | Null = {
     val undersplit = underlying.trySplit()
     if (undersplit == null) null
     else new IntToLongSpliterator(undersplit, mapping)
@@ -121,10 +121,10 @@ class IntToLongSpliterator(private val underlying: Spliterator.OfInt, mapping: I
 class SpliteratorStepper[A](sp: Spliterator[A]) extends AnyStepper[A] {
   override def trySplit(): AnyStepper[A] = {
     val r = sp.trySplit()
-    if (r == null) null else new SpliteratorStepper(r)
+    if (r == null) null.asInstanceOf[AnyStepper[A]] else new SpliteratorStepper(r)
   }
 
-  var cache: AnyRef = null
+  var cache: AnyRef | Null = null
 
   override def hasStep: Boolean = cache != null || sp.tryAdvance(x => cache = x.asInstanceOf[AnyRef])
 
