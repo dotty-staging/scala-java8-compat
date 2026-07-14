@@ -56,5 +56,5 @@ final class RichIndexedSeqCanStep[T](private val underlying: collection.IndexedS
     case StepperShape.LongValue   => new StepsLongIndexedSeq  (underlying.asInstanceOf[collection.IndexedSeqLike[Long, _]],   0, underlying.length)
     case StepperShape.DoubleValue => new StepsDoubleIndexedSeq(underlying.asInstanceOf[collection.IndexedSeqLike[Double, _]], 0, underlying.length)
     case _            => ss.parUnbox(new StepsAnyIndexedSeq[T](underlying,                                                    0, underlying.length))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

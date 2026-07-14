@@ -43,7 +43,7 @@ trait StreamExtensions {
   // Not `CC[X] <: IterableOnce[X]`, but `C` with an extra constraint, to support non-parametric classes like IntAccumulator
   implicit class IterableNonGenericHasParStream[A, C <: IterableOnce[_]](c: C)(implicit ev: C <:< IterableOnce[A]) {
     private type IterableOnceWithEfficientStepper = IterableOnce[A] {
-      def stepper[S <: Stepper[_]](implicit shape : StepperShape[A, S]) : S with EfficientSplit
+      def stepper[S <: Stepper[_]](implicit shape : StepperShape[A, S]) : S & EfficientSplit
     }
 
     /** Create a parallel [[java.util.stream.Stream Java Stream]] for this collection. If the
@@ -85,9 +85,9 @@ trait StreamExtensions {
 
 
   implicit class MapHasParKeyValueStream[K, V, CC[X, Y] <: collection.MapOps[X, Y, collection.Map, _]](cc: CC[K, V]) {
-    private type MapOpsWithEfficientKeyStepper = collection.MapOps[K, V, collection.Map, _] { def keyStepper[S <: Stepper[_]](implicit shape : StepperShape[K, S]) : S with EfficientSplit }
-    private type MapOpsWithEfficientValueStepper = collection.MapOps[K, V, collection.Map, _] { def valueStepper[S <: Stepper[_]](implicit shape : StepperShape[V, S]) : S with EfficientSplit }
-    private type MapOpsWithEfficientStepper = collection.MapOps[K, V, collection.Map, _] { def stepper[S <: Stepper[_]](implicit shape : StepperShape[(K, V), S]) : S with EfficientSplit }
+    private type MapOpsWithEfficientKeyStepper = collection.MapOps[K, V, collection.Map, _] { def keyStepper[S <: Stepper[_]](implicit shape : StepperShape[K, S]) : S & EfficientSplit }
+    private type MapOpsWithEfficientValueStepper = collection.MapOps[K, V, collection.Map, _] { def valueStepper[S <: Stepper[_]](implicit shape : StepperShape[V, S]) : S & EfficientSplit }
+    private type MapOpsWithEfficientStepper = collection.MapOps[K, V, collection.Map, _] { def stepper[S <: Stepper[_]](implicit shape : StepperShape[(K, V), S]) : S & EfficientSplit }
 
     /** Create a parallel [[java.util.stream.Stream Java Stream]] for the keys of this map. If
       * the keys are primitive values, a corresponding specialized Stream is returned (e.g.,
@@ -134,7 +134,7 @@ trait StreamExtensions {
       s.fromStepper(stepper.asInstanceOf[St], par = false)
   }
 
-  implicit class StepperHasParStream[A](stepper: Stepper[A] with EfficientSplit) {
+  implicit class StepperHasParStream[A](stepper: Stepper[A] & EfficientSplit) {
     /** Create a parallel [[java.util.stream.Stream Java Stream]] for this stepper. If the
       * stepper yields primitive values, a corresponding specialized Stream is returned (e.g.,
       * [[java.util.stream.IntStream `IntStream`]]).

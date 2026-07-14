@@ -18,7 +18,7 @@ import Stepper._
 /** Abstracts all the generic operations of stepping over a TrieIterator by asking itself to
   * slice itself into pieces.  Note that `i` must be kept up to date in subclasses.
   */
-private[java8] trait AbstractStepsLikeTrieIterator[A, Sub >: Null, Semi >: Null <: Sub with AbstractStepsLikeTrieIterator[A, Sub, _]]
+private[java8] trait AbstractStepsLikeTrieIterator[A, Sub >: Null, Semi >: Null <: Sub & AbstractStepsLikeTrieIterator[A, Sub, _]]
 extends AbstractStepsLikeSliced[Iterator[A], Sub, Semi] {
   protected def demiclone(it: Iterator[A], N: Int): Semi
   override def characteristics() = Immutable

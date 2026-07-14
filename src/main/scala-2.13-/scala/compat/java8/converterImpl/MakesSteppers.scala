@@ -16,15 +16,15 @@ import scala.compat.java8.collectionImpl._
 
 trait MakesStepper[T, +Extra] extends Any {
   /** Generates a fresh stepper of type `S` for element type `T` */
-  def stepper[S <: Stepper[_]](implicit ss: StepperShape[T, S]): S with Extra
+  def stepper[S <: Stepper[_]](implicit ss: StepperShape[T, S]): S & Extra
 }
 
 trait MakesKeyValueStepper[K, V, +Extra] extends Any {
   /** Generates a fresh stepper of type `S` over map keys of type `K` */
-  def keyStepper[S <: Stepper[_]](implicit ss: StepperShape[K, S]): S with Extra
+  def keyStepper[S <: Stepper[_]](implicit ss: StepperShape[K, S]): S & Extra
 
   /** Generates a fresh stepper of type `S` over map values of type `V` */
-  def valueStepper[S <: Stepper[_]](implicit ss: StepperShape[V, S]): S with Extra
+  def valueStepper[S <: Stepper[_]](implicit ss: StepperShape[V, S]): S & Extra
 }
 
 /** Encodes the translation from an element type `T` to the corresponding Stepper type `S` */
@@ -38,7 +38,7 @@ sealed trait StepperShape[T, S <: Stepper[_]] {
 
   /** Create an unboxing primitive parallel (i.e. `with EfficientSubstep`) Stepper from a boxed `AnyStepper`.
     * This is an identity operation for reference shapes. */
-  def parUnbox(st: AnyStepper[T] with EfficientSubstep): S with EfficientSubstep
+  def parUnbox(st: AnyStepper[T] & EfficientSubstep): S & EfficientSubstep
 }
 object StepperShape extends StepperShapeLowPriority {
   // reference
@@ -58,37 +58,37 @@ object StepperShape extends StepperShapeLowPriority {
   implicit val intStepperShape: StepperShape[Int, IntStepper] = new StepperShape[Int, IntStepper] {
     def shape = IntValue
     def seqUnbox(st: AnyStepper[Int]): IntStepper = new Stepper.UnboxingIntStepper(st)
-    def parUnbox(st: AnyStepper[Int] with EfficientSubstep): IntStepper with EfficientSubstep = new Stepper.UnboxingIntStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Int] & EfficientSubstep): IntStepper & EfficientSubstep = new Stepper.UnboxingIntStepper(st) with EfficientSubstep
   }
   implicit val longStepperShape: StepperShape[Long, LongStepper] = new StepperShape[Long, LongStepper] {
     def shape = LongValue
     def seqUnbox(st: AnyStepper[Long]): LongStepper = new Stepper.UnboxingLongStepper(st)
-    def parUnbox(st: AnyStepper[Long] with EfficientSubstep): LongStepper with EfficientSubstep = new Stepper.UnboxingLongStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Long] & EfficientSubstep): LongStepper & EfficientSubstep = new Stepper.UnboxingLongStepper(st) with EfficientSubstep
   }
   implicit val doubleStepperShape: StepperShape[Double, DoubleStepper] = new StepperShape[Double, DoubleStepper] {
     def shape = DoubleValue
     def seqUnbox(st: AnyStepper[Double]): DoubleStepper = new Stepper.UnboxingDoubleStepper(st)
-    def parUnbox(st: AnyStepper[Double] with EfficientSubstep): DoubleStepper with EfficientSubstep = new Stepper.UnboxingDoubleStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Double] & EfficientSubstep): DoubleStepper & EfficientSubstep = new Stepper.UnboxingDoubleStepper(st) with EfficientSubstep
   }
   implicit val byteStepperShape: StepperShape[Byte, IntStepper] = new StepperShape[Byte, IntStepper] {
     def shape = ByteValue
     def seqUnbox(st: AnyStepper[Byte]): IntStepper = new Stepper.UnboxingByteStepper(st)
-    def parUnbox(st: AnyStepper[Byte] with EfficientSubstep): IntStepper with EfficientSubstep = new Stepper.UnboxingByteStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Byte] & EfficientSubstep): IntStepper & EfficientSubstep = new Stepper.UnboxingByteStepper(st) with EfficientSubstep
   }
   implicit val shortStepperShape: StepperShape[Short, IntStepper] = new StepperShape[Short, IntStepper] {
     def shape = ShortValue
     def seqUnbox(st: AnyStepper[Short]): IntStepper = new Stepper.UnboxingShortStepper(st)
-    def parUnbox(st: AnyStepper[Short] with EfficientSubstep): IntStepper with EfficientSubstep = new Stepper.UnboxingShortStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Short] & EfficientSubstep): IntStepper & EfficientSubstep = new Stepper.UnboxingShortStepper(st) with EfficientSubstep
   }
   implicit val charStepperShape: StepperShape[Char, IntStepper] = new StepperShape[Char, IntStepper] {
     def shape = CharValue
     def seqUnbox(st: AnyStepper[Char]): IntStepper = new Stepper.UnboxingCharStepper(st)
-    def parUnbox(st: AnyStepper[Char] with EfficientSubstep): IntStepper with EfficientSubstep = new Stepper.UnboxingCharStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Char] & EfficientSubstep): IntStepper & EfficientSubstep = new Stepper.UnboxingCharStepper(st) with EfficientSubstep
   }
   implicit val floatStepperShape: StepperShape[Float, DoubleStepper] = new StepperShape[Float, DoubleStepper] {
     def shape = FloatValue
     def seqUnbox(st: AnyStepper[Float]): DoubleStepper = new Stepper.UnboxingFloatStepper(st)
-    def parUnbox(st: AnyStepper[Float] with EfficientSubstep): DoubleStepper with EfficientSubstep = new Stepper.UnboxingFloatStepper(st) with EfficientSubstep
+    def parUnbox(st: AnyStepper[Float] & EfficientSubstep): DoubleStepper & EfficientSubstep = new Stepper.UnboxingFloatStepper(st) with EfficientSubstep
   }
 }
 trait StepperShapeLowPriority {
@@ -97,6 +97,6 @@ trait StepperShapeLowPriority {
   private[this] val anyStepperShapePrototype: StepperShape[AnyRef, AnyStepper[AnyRef]] = new StepperShape[AnyRef, AnyStepper[AnyRef]] {
     def shape = StepperShape.Reference
     def seqUnbox(st: AnyStepper[AnyRef]): AnyStepper[AnyRef] = st
-    def parUnbox(st: AnyStepper[AnyRef] with EfficientSubstep): AnyStepper[AnyRef] with EfficientSubstep = st
+    def parUnbox(st: AnyStepper[AnyRef] & EfficientSubstep): AnyStepper[AnyRef] & EfficientSubstep = st
   }
 }

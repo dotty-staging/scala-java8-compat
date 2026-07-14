@@ -26,7 +26,7 @@ private[java8] abstract class AbstractStepsLikeIterator[A, SP >: Null <: Stepper
 }
 
 /** Abstracts the operation of stepping over an iterator (that needs to be cached when splitting) */
-private[java8] abstract class StepsLikeIterator[A, SLI >: Null <: StepsLikeIterator[A, SLI] with AnyStepper[A]](_underlying: Iterator[A])
+private[java8] abstract class StepsLikeIterator[A, SLI >: Null <: StepsLikeIterator[A, SLI] & AnyStepper[A]](_underlying: Iterator[A])
   extends AbstractStepsLikeIterator[A, AnyStepper[A], SLI](_underlying)
   with AnyStepper[A]
 {
@@ -49,7 +49,7 @@ private[java8] abstract class StepsLikeIterator[A, SLI >: Null <: StepsLikeItera
 }
 
 /** Abstracts the operation of stepping over an iterator of Doubles (needs caching when split) */
-private[java8] abstract class StepsDoubleLikeIterator[SLI >: Null <: StepsDoubleLikeIterator[SLI] with DoubleStepper](_underlying: Iterator[Double])
+private[java8] abstract class StepsDoubleLikeIterator[SLI >: Null <: StepsDoubleLikeIterator[SLI] & DoubleStepper](_underlying: Iterator[Double])
   extends AbstractStepsLikeIterator[Double, DoubleStepper, SLI](_underlying)
   with DoubleStepper
 {
@@ -72,7 +72,7 @@ private[java8] abstract class StepsDoubleLikeIterator[SLI >: Null <: StepsDouble
 }
 
 /** Abstracts the operation of stepping over an iterator of Ints (needs caching when split) */
-private[java8] abstract class StepsIntLikeIterator[SLI >: Null <: StepsIntLikeIterator[SLI] with IntStepper](_underlying: Iterator[Int])
+private[java8] abstract class StepsIntLikeIterator[SLI >: Null <: StepsIntLikeIterator[SLI] & IntStepper](_underlying: Iterator[Int])
   extends AbstractStepsLikeIterator[Int, IntStepper, SLI](_underlying)
   with IntStepper
 {
@@ -95,7 +95,7 @@ private[java8] abstract class StepsIntLikeIterator[SLI >: Null <: StepsIntLikeIt
 }
 
 /** Abstracts the operation of stepping over an iterator of Longs (needs caching when split) */
-private[java8] abstract class StepsLongLikeIterator[SLI >: Null <: StepsLongLikeIterator[SLI] with LongStepper](_underlying: Iterator[Long])
+private[java8] abstract class StepsLongLikeIterator[SLI >: Null <: StepsLongLikeIterator[SLI] & LongStepper](_underlying: Iterator[Long])
   extends AbstractStepsLikeIterator[Long, LongStepper, SLI](_underlying)
   with LongStepper
 {

@@ -138,19 +138,19 @@ extends StepsLongLikeImmHashMap[K, Long, StepsLongImmHashMapValue[K]](_underlyin
 
 final class RichImmHashMapCanStep[K, V](private val underlying: collection.immutable.HashMap[K, V]) extends AnyVal with MakesKeyValueStepper[K, V, EfficientSubstep] with MakesStepper[(K, V), EfficientSubstep] {
   def stepper[S <: Stepper[_]](implicit ss: StepperShape[(K, V), S]) =
-    new StepsAnyImmHashMap[K, V](underlying, 0, underlying.size).asInstanceOf[S with EfficientSubstep]
+    new StepsAnyImmHashMap[K, V](underlying, 0, underlying.size).asInstanceOf[S & EfficientSubstep]
 
   def keyStepper[S <: Stepper[_]](implicit ss: StepperShape[K, S]) = ((ss.shape: @switch) match {
     case StepperShape.IntValue    => new StepsIntImmHashMapKey      (underlying.asInstanceOf[collection.immutable.HashMap[Int, V]],    0, underlying.size)
     case StepperShape.LongValue   => new StepsLongImmHashMapKey     (underlying.asInstanceOf[collection.immutable.HashMap[Long, V]],   0, underlying.size)
     case StepperShape.DoubleValue => new StepsDoubleImmHashMapKey   (underlying.asInstanceOf[collection.immutable.HashMap[Double, V]], 0, underlying.size)
     case _            => ss.parUnbox(new StepsAnyImmHashMapKey[K, V](underlying,                                                       0, underlying.size))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 
   def valueStepper[S <: Stepper[_]](implicit ss: StepperShape[V, S]) = ((ss.shape: @switch) match {
     case StepperShape.IntValue    => new StepsIntImmHashMapValue      (underlying.asInstanceOf[collection.immutable.HashMap[K, Int]],    0, underlying.size)
     case StepperShape.LongValue   => new StepsLongImmHashMapValue     (underlying.asInstanceOf[collection.immutable.HashMap[K, Long]],   0, underlying.size)
     case StepperShape.DoubleValue => new StepsDoubleImmHashMapValue   (underlying.asInstanceOf[collection.immutable.HashMap[K, Double]], 0, underlying.size)
     case _            => ss.parUnbox(new StepsAnyImmHashMapValue[K, V](underlying,                                                       0, underlying.size))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

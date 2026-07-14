@@ -93,5 +93,5 @@ final class RichArrayCanStep[T](private val underlying: Array[T]) extends AnyVal
     case StepperShape.ShortValue  => new StepsWidenedShortArray  (underlying.asInstanceOf[Array[Short  ]], 0, underlying.length)
     case StepperShape.CharValue   => new StepsWidenedCharArray   (underlying.asInstanceOf[Array[Char   ]], 0, underlying.length)
     case StepperShape.FloatValue  => new StepsWidenedFloatArray  (underlying.asInstanceOf[Array[Float  ]], 0, underlying.length)
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

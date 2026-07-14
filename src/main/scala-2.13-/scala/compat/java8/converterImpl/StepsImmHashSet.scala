@@ -54,5 +54,5 @@ final class RichImmHashSetCanStep[T](private val underlying: collection.immutabl
     case StepperShape.LongValue   => new StepsLongImmHashSet  (underlying.iterator.asInstanceOf[Iterator[Long]],   underlying.size)
     case StepperShape.DoubleValue => new StepsDoubleImmHashSet(underlying.iterator.asInstanceOf[Iterator[Double]], underlying.size)
     case _            => ss.parUnbox(new StepsAnyImmHashSet[T](underlying.iterator,                                underlying.size))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

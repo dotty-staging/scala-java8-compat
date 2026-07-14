@@ -198,5 +198,5 @@ final class RichVectorCanStep[T](private val underlying: Vector[T]) extends AnyV
     case StepperShape.LongValue   => new StepsLongVector  (underlying.asInstanceOf[Vector[Long]],   0, underlying.length)
     case StepperShape.DoubleValue => new StepsDoubleVector(underlying.asInstanceOf[Vector[Double]], 0, underlying.length)
     case _            => ss.parUnbox(new StepsAnyVector[T](underlying,                              0, underlying.length))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

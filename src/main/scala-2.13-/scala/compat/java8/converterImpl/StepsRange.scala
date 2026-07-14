@@ -52,7 +52,7 @@ extends StepsLongLikeIndexed[StepsLongNumericRange](_i0, _iN) {
 
 final class RichRangeCanStep[T](private val underlying: Range) extends AnyVal with MakesStepper[Int, EfficientSubstep] {
   def stepper[S <: Stepper[_]](implicit ss: StepperShape[Int, S]) =
-    new StepsIntRange(underlying, 0, underlying.length).asInstanceOf[S with EfficientSubstep]
+    new StepsIntRange(underlying, 0, underlying.length).asInstanceOf[S & EfficientSubstep]
 }
 
 final class RichNumericRangeCanStep[T](private val underlying: collection.immutable.NumericRange[T]) extends AnyVal with MakesStepper[T, EfficientSubstep] {
@@ -60,5 +60,5 @@ final class RichNumericRangeCanStep[T](private val underlying: collection.immuta
     case StepperShape.IntValue    => new StepsIntNumericRange   (underlying.asInstanceOf[collection.immutable.NumericRange[Int]],  0, underlying.length)
     case StepperShape.LongValue   => new StepsLongNumericRange  (underlying.asInstanceOf[collection.immutable.NumericRange[Long]], 0, underlying.length)
     case _            => ss.parUnbox(new StepsAnyNumericRange[T](underlying,                                                       0, underlying.length))
-  }).asInstanceOf[S with EfficientSubstep]
+  }).asInstanceOf[S & EfficientSubstep]
 }

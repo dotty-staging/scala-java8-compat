@@ -59,6 +59,6 @@ final class RichFlatHashTableCanStep[T](private val underlying: collection.mutab
       case StepperShape.LongValue   => new StepsLongFlatHashTable  (tbl, 0, tbl.length)
       case StepperShape.DoubleValue => new StepsDoubleFlatHashTable(tbl, 0, tbl.length)
       case _            => ss.parUnbox(new StepsAnyFlatHashTable[T](tbl, 0, tbl.length))
-    }).asInstanceOf[S with EfficientSubstep]
+    }).asInstanceOf[S & EfficientSubstep]
   }
 }

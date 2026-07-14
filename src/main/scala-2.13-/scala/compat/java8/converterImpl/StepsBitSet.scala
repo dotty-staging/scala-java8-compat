@@ -70,7 +70,7 @@ final class RichBitSetCanStep(private val underlying: collection.BitSet) extends
       case n: collection.immutable.BitSet.BitSetN => RichBitSetCanStep.reflectInternalsN(n)
       case x => x.toBitMask
     }
-    new StepsIntBitSet(bits, 0, math.min(bits.length*64L, Int.MaxValue).toInt).asInstanceOf[S with EfficientSubstep]
+    new StepsIntBitSet(bits, 0, math.min(bits.length*64L, Int.MaxValue).toInt).asInstanceOf[S & EfficientSubstep]
   }
 }
 

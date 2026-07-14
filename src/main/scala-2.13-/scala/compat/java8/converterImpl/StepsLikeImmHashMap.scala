@@ -19,7 +19,7 @@ import Stepper._
   * `next` must update `i` but not `i0` so that later splitting steps can keep track of whether the
   * collection needs some sort of modification before transmission to the subclass.
   */
-private[java8] trait AbstractStepsLikeImmHashMap[K, V, A, Sub >: Null, Semi >: Null <: Sub with AbstractStepsLikeImmHashMap[K, V, A, Sub, _]]
+private[java8] trait AbstractStepsLikeImmHashMap[K, V, A, Sub >: Null, Semi >: Null <: Sub & AbstractStepsLikeImmHashMap[K, V, A, Sub, _]]
 extends AbstractStepsLikeSliced[collection.immutable.HashMap[K, V], Sub, Semi] {
   protected var theIterator: Iterator[A] = null
   protected def demiclone(u: collection.immutable.HashMap[K,V], j0: Int, jN: Int): Semi
